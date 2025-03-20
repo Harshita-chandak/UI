@@ -1,0 +1,12 @@
+{
+  "name": "social-media-post-ai-main",
+  "version": "1.0.0",
+  "description": "This backend handles: - News fetching - Prompt generation - API endpoints for the application",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
