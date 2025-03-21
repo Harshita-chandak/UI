@@ -14,7 +14,7 @@ body {
 
 /* Container */
 .form-container {
-    min-width: 600px;
+    min-width: 50%;
     background: white;
     padding: 20px;
     border-radius: 10px;
@@ -144,43 +144,48 @@ button:hover {
     <div class="container">
     <div class="form-container">
         <div class="input-group">
-            <label for="categorySelect">Select News Category:</label>
-            <select id="categorySelect" onchange="loadNewsByCategory()">
-                <option value="">Select Category</option>
-                <option value="WORLD">World</option>
-                <option value="NATION">Nation</option>
-                <option value="BUSINESS">Business</option>
-                <option value="TECHNOLOGY">Technology</option>
-                <option value="ENTERTAINMENT">Entertainment</option>
-                <option value="SPORTS">Sports</option>
-                <option value="SCIENCE">Science</option>
-                <option value="HEALTH">Health</option>
-            </select>
-        </div>
-        <h4><b>OR</b></h4>
-        <div class="input-group">
-            <label for="topicSearch">Search Topic:</label>
-            <div class="search-container">
-                <input type="text" id="topicSearch" placeholder="Enter a topic (e.g., Climate Change)" />
-                <button onclick="loadNewsByTopic()">Search</button>
-            </div>
-        </div>
-        <div class="input-group">
-            <label for="newsSelect">Select News (Trend):</label>
-            <select id="newsSelect">
-                <option value="">-- Select News --</option>
-            </select>
-        </div>
-        <div class="input-group">
             <label for="postTypeSelect">Select Post Type:</label>
             <select id="postTypeSelect" onchange="loadForm()">
                 <option value="">-- Select --</option>
             </select>
         </div>
-    
+
+<!-- Wrap Category and Trends inside a hidden div -->
+<div id="postTypeOptions" style="display: none;">
+    <div class="input-group">
+        <label for="categorySelect">Select News Category:</label>
+        <select id="categorySelect" onchange="loadNewsByCategory()">
+            <option value="">Select Category</option>
+            <option value="WORLD">World</option>
+            <option value="NATION">Nation</option>
+            <option value="BUSINESS">Business</option>
+            <option value="TECHNOLOGY">Technology</option>
+            <option value="ENTERTAINMENT">Entertainment</option>
+            <option value="SPORTS">Sports</option>
+            <option value="SCIENCE">Science</option>
+            <option value="HEALTH">Health</option>
+        </select>
+    </div>
+
+    <h4><b>OR</b></h4>
+    <div class="input-group">
+        <label for="topicSearch">Search Topic:</label>
+        <div class="search-container">
+            <input type="text" id="topicSearch" placeholder="Enter a topic (e.g., Climate Change)" />
+            <button onclick="loadNewsByTopic()">Search</button>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label for="newsSelect">Select News (Trend):</label>
+        <select id="newsSelect">
+            <option value="">-- Select News --</option>
+        </select>
+    </div>
+</div>
         <div id="formFields"></div>
         <div id="outformFields">
-            <button id="generateBtn" onclick="generatePrompt()" disabled>Generate</button>
+            <button id="generateBtn" onclick="generatePrompt()" >Generate</button>
         </div>
     </div>
     <div class="output-group">

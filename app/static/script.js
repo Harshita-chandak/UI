@@ -76,28 +76,48 @@ async function loadNewsByTopic() {
     }
 }
 
+
+document.getElementById("postTypeSelect").addEventListener("change", function() {
+    let postTypeFields = document.getElementById("postTypeFields");
+    let postType = document.getElementById("postTypeSelect")?.value; // Get selected value safely
+
+    if (!postTypeFields) return; // Prevent errors if the element is missing
+
+    if (postType === "social_media_post" || postType === "meme_post") {
+        postTypeFields.style.display = "block"; // Show Category & Trends
+    } else {
+        postTypeFields.style.display = "none"; // Hide if no valid post type
+    }
+});
+
 async function loadForm() {
     const postType = document.getElementById("postTypeSelect").value;
     const formFieldsDiv = document.getElementById("formFields");
     const generateBtn = document.getElementById("generateBtn");
     const updateTrendsBtn = document.getElementById("updateTrendsBtn");
+    const postTypeOptionsDiv = document.getElementById("postTypeOptions");
 
+    const validPostTypes = ["meme_post", "social_media_post"]; // Store valid types in an array
     // Guard against empty or invalid postType
-    if (!postType) {
+    if (!validPostTypes.includes(postType)) {
         formFieldsDiv.innerHTML = "";
-        generateBtn.disabled = true;
         updateTrendsBtn.style.display = "none";
-        return;
-    }
 
+        if(postTypeOptionsDiv){
+            postTypeOptionsDiv.style.display = "none"; // Hide options when invalid          
+        }
+        return;
+    }else if(postTypeOptionsDiv){
+        postTypeOptionsDiv.style.display = "block"; // Show the div
+    } 
+  
     // Prevent duplicate execution
     if (formFieldsDiv.dataset.lastPostType === postType) return;
     formFieldsDiv.dataset.lastPostType = postType;
-
     formFieldsDiv.innerHTML = "";
     generateBtn.disabled = true;
     updateTrendsBtn.style.display = "inline-block";
-
+    
     try {
         const response = await fetch(`/generate_prompt_form?post_type=${postType}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -253,8 +273,10 @@ async function generateImage() {
 
         resultDiv1.innerHTML = imageData.image_urls.map(url => `
             <div class="image-container" >
+                <button class="open-btn" onclick="openImage('${url}')">
+                
                 <img src="${url}" alt="Generated Image" class="generated-image"  />
-                <button class="open-btn" onclick="openImage('${url}')">Open in New Tab</button>
+                </button>
             </div>
         `).join("");
 
@@ -301,6 +323,7 @@ function openImage(imageUrl) {
                         display: none;
                         max-width: 100%;
                         height: auto;
+                        height:100%;
                     }
                     button {
                         padding: 10px 15px;
@@ -321,9 +344,11 @@ function openImage(imageUrl) {
                 <div class="container">
                     <img id="imageView" src="${imageUrl}" alt="Generated Image">
                     <canvas id="inpaintCanvas"></canvas>
-                    <button id="inpaintBtn" style="display: inline-block;">Inpaint</button>
+                    <button id="inpaintBtn" style="display:block;">Inpaint</button>
+                    <button id="removeBtn" style="display: block;">Remove</button>
                     <button id="undoBtn" style="display:none;">Undo</button>
-                    <button id="submitInpaintBtn" style="display:none;">Inpaint Image</button>
+                    <button id="submitInpaintBtn" style="display:none;">Inpaint with Image</button>
+                    <button id="submitTextInpaintBtn" style="display:none;">Inpaint with text</button>
                     <button id="backBtn" style="display:none;">Back</button>
                     <img id="inpaintResult" style="margin-top: 20px; max-width: 100%; display:none;">
                 </div>
@@ -348,9 +373,11 @@ function openImage(imageUrl) {
                             // Hide image and show canvas
                             imageView.style.display = "none";
                             canvas.style.display = "block";
+                            document.getElementById("removeBtn").style.display = "none";
                             document.getElementById("inpaintBtn").style.display = "none";
                             document.getElementById("undoBtn").style.display = "inline-block";
                             document.getElementById("submitInpaintBtn").style.display = "inline-block";
+                            document.getElementById("submitTextInpaintBtn").style.display = "inline-block";
                             document.getElementById("backBtn").style.display = "inline-block";
 
                             // Set canvas size
