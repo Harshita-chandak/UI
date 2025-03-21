@@ -226,48 +226,44 @@ async function generatePrompt() {
         alert(`Failed to process request. Error: ${error.message}`);
     }
 }
-async function generateImage(){
-        // Step 2: Generate the image using the workflow data
-        if(!generateResult || !generateResult.workflow_data){
-            alert("no valid workflow data. Please generate prompt first");
-            return;
-        }
-        const resultDiv1 = document.getElementById("imgresult")
-        resultDiv1.innerHTML = `
-            <div>Generating image...</div>
-            <div class="image-loading">Loading image...</div>
-        `;
-        resultDiv1.classList.add("loading");
-        try{
+async function generateImage() {
+    if (!generateResult || !generateResult.workflow_data) {
+        alert("No valid workflow data. Please generate a prompt first.");
+        return;
+    }
+
+    const resultDiv1 = document.getElementById("imgresult");
+    resultDiv1.innerHTML = `<div>Generating image...</div>`;
+
+    try {       
         const generateImageResponse = await fetch("/generate_image", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ workflow_data: generateResult.workflow_data })
         });
-        
-        const imageData = await generateImageResponse.json();
-        console.log("Image Data:", imageData);
-        
-        if (!imageData.image_url) {
-            throw new Error("Image URL is missing!");
-        }
-        
-        const imageUrl = imageData.image_url;
-        document.getElementById("imgresult").innerHTML = `
-            <div class="image-container">
-                <img src="${imageUrl}" alt="Generated Image" class="generated-image" />
-                <button class="open-btn" onclick="openImage('${imageUrl}')">Open in New Tab</button>
-            </div>
-        `;
-        
-    }catch(error){
-        console.error("Error",error);
-        alert(`Fail to generate image: Error ${error.message}` );
 
-    }finally{
-        resultDiv1.classList.remove("loading");
+        // Check if response is OK
+        if (!generateImageResponse.ok) {
+            throw new Error(`Server Error: ${generateImageResponse.status}`);
+        }
+
+        const imageData = await generateImageResponse.json();
+        console.log("🖼️ Parsed Image Data:", imageData);
+
+
+        resultDiv1.innerHTML = imageData.image_urls.map(url => `
+            <div class="image-container" >
+                <img src="${url}" alt="Generated Image" class="generated-image"  />
+                <button class="open-btn" onclick="openImage('${url}')">Open in New Tab</button>
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error("❌ Error in generateImage:", error);
+        alert(`Fail to generate image: ${error.message}`);
     }
 }
+
 function openImage(imageUrl) {
     // Open a new tab
     const newTab = window.open();
@@ -314,6 +310,7 @@ function openImage(imageUrl) {
                         border: none;
                         cursor: pointer;
                         border-radius: 5px;
+                        display: inline-block;
                     }
                     button:hover {
                         background: #0056b3;
@@ -324,7 +321,7 @@ function openImage(imageUrl) {
                 <div class="container">
                     <img id="imageView" src="${imageUrl}" alt="Generated Image">
                     <canvas id="inpaintCanvas"></canvas>
-                    <button id="inpaintBtn">Inpaint</button>
+                    <button id="inpaintBtn" style="display: inline-block;">Inpaint</button>
                     <button id="undoBtn" style="display:none;">Undo</button>
                     <button id="submitInpaintBtn" style="display:none;">Inpaint Image</button>
                     <button id="backBtn" style="display:none;">Back</button>

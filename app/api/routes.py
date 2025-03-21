@@ -1,3 +1,4 @@
+from flask import jsonify
 import websockets
 import uuid
 import json
@@ -159,18 +160,16 @@ async def generate_image(request_data: dict):
 async def generate_image(request: Request):
     data = await request.json()
     workflow_data = data.get("workflow_data")
-    
-   
-    #router.mount("/static", StaticFiles(directory="static"), name="static")
 
+    # Static response (consider replacing with actual image generation logic)
+    fixed_image_url = [
+        "/static/url1.png",
+        "/static/url2.png",
+        "/static/url3.png",
+        "/static/url4.png"
+    ]  
 
-    # Define a fixed image URL
-    fixed_image_url = "/static/url1.png"  # Replace with your actual image
-
-    print("Received Workflow Data:", workflow_data)
-    print("Using Fixed Image URL:", fixed_image_url)
-
-    return {"message": "Image generated successfully!", "image_url": fixed_image_url}
+    return JSONResponse(content={"image_urls": fixed_image_url})
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "bmp", "tiff", "webp"}
 

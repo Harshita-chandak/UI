@@ -14,7 +14,7 @@ body {
 
 /* Container */
 .form-container {
-    max-width: 600px;
+    min-width: 600px;
     background: white;
     padding: 20px;
     border-radius: 10px;
@@ -95,10 +95,20 @@ button:hover {
     display: flex;
     gap: 10px;
 }
+.feedback-group{
 
+    margin: 15px 0;
+    min-width: 50%;
+    
+    padding: 20px;
+    border-radius: 10px;
+    
+    margin: 20px auto;
+    text-align: left;
+}
 /* Output Section */
 .output-group {
-    max-width: 600px;
+    min-width: 50%;
     margin: 20px auto;
     background: white;
     padding: 20px;
@@ -116,7 +126,8 @@ button:hover {
     color: #333;
 }
 .container{
-    display: flex;
+    
+    display:flex;
 }
 /* Responsive */
 @media (max-width: 768px) {
@@ -166,20 +177,27 @@ button:hover {
                 <option value="">-- Select --</option>
             </select>
         </div>
-    </div>
-    <div id="formFields"></div>
-    <div id="outformFields">
-        <button id="generateBtn" onclick="generatePrompt()" disabled>Generate</button>
-        <button id="updateTrendsBtn" onclick="updateTrends()">Update Trends</button>
-        <button id="generateImage" onclick="generateImage()">generate Image</button>
+    
+        <div id="formFields"></div>
+        <div id="outformFields">
+            <button id="generateBtn" onclick="generatePrompt()" disabled>Generate</button>
+        </div>
     </div>
     <div class="output-group">
         <h2>Generated Prompt</h2>
-        <pre id="result"></pre>      
-        <h2>Generated image</h2>
-        <pre id="imgresult"></pre> 
+        <pre id="result">           
+        </pre> 
+        <div class="feedback-group">     
+        <label for="feedback">Add feedback</label>
+            <input type="text" id="feedback" placeholder="add feedback here">
+        </div>
     </div>
 </div>
+        <button id="updateTrendsBtn" onclick="updateTrends()">Update Trends</button>
+        <button id="generateImage" onclick="generateImage()">generate Image</button>
+        <h2>Generated image</h2>
+        <pre id="imgresult" style="display:flex"></pre> 
+        
     <script src="/static/script.js"></script>
 </body>
 </html>
